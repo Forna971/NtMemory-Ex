@@ -29,28 +29,43 @@ Handles and allocated memory are managed automatically using C++ smart pointers 
 
 ## 🚀 Usage
 
+### Example: Dumping Process Header (PE Header)
+
+This example demonstrates how to attach to a process, escalate privileges, and dump the raw memory of the module header for inspection.
+
 ```cpp
-#include "mem.h"
 #include <iostream>
+#include "mem.h"
+#include "utils.h"
 
 int main() {
-    // Attach to process (waits until found)
-    auto proc = Memory::Process::attach(L"target_process.exe", true);
-
-    if (proc) {
-        std::cout << "Attached! PID found." << std::endl;
-
-        // Get Module Base
-        uintptr_t client = proc->get_module_base(L"client.dll");
-
-        // Read Memory (Template-based)
-        int health = proc->read<int>(client + 0x100);
-        
-        // Write Memory
-        proc->write<int>(client + 0x100, 1337);
+    // 1. Acquire Debug Privileges (Optional, but good for system processes)
+    if (Utils::EnableDebugPrivilege()) {
+        std::cout << "[+] SeDebugPrivilege enabled." << std::endl;
     }
 
-    return 0;}
+    // 2. Attach to target process (e.g., Notepad)
+    auto proc = Memory::Process::attach(L"notepad.exe", true);
+
+    if (proc) {
+        std::cout << "[+] Attached to process." << std::endl;
+
+        // 3. Get Base Address
+        uintptr_t base = proc->get_module_base(L"notepad.exe");
+        
+        // 4. Read the DOS Header (First 64 bytes)
+        std::vector<uint8_t> headerBuffer(64);
+        proc->read_buffer(base, headerBuffer.data(), headerBuffer.size());
+
+        // 5. Visualization (Hex Dump)
+        std::cout << "\n--- Memory Dump (DOS Header) ---\n";
+        std::cout << Utils::HexDump(headerBuffer.data(), headerBuffer.size());
+    } else {
+        std::cout << "[-] Waiting for process..." << std::endl;
+    }
+
+    return 0;
+}
 ```
 
 📂 Project Structure
