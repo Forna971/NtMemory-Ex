@@ -1,4 +1,3 @@
-    
 # NtMemory-Ex 🧠
 
 > A high-performance, stealthy external memory wrapper for Windows, leveraging direct syscalls and the Pimpl idiom.
@@ -51,10 +50,8 @@ int main() {
         proc->write<int>(client + 0x100, 1337);
     }
 
-    return 0;
-}
-
-  
+    return 0;}
+```
 
 📂 Project Structure
 
