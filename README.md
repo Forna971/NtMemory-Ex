@@ -1,3 +1,4 @@
+    
 # NtMemory-Ex 🧠
 
 > A high-performance, stealthy external memory wrapper for Windows, leveraging direct syscalls and the Pimpl idiom.
@@ -52,3 +53,20 @@ int main() {
 
     return 0;
 }
+
+  
+
+📂 Project Structure
+
+    mem.h - Public Interface (RAII wrapper).
+
+    detail/mem_pimpl.cpp - Core Logic: Syscall generation, PE Parsing, Assembly stubs.
+
+    utils.h - Vector math and WorldToScreen helpers.
+
+⚠️ Disclaimer
+
+This software explores undocumented Windows Internals and memory manipulation techniques. It is intended for educational purposes, reverse engineering research, and defensive security testing.
+<div align="center">
+Developed by <a href="https://github.com/Forna971"><b>Forna971</b></a>
+</div>
